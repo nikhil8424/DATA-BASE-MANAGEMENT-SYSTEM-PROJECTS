@@ -1,0 +1,504 @@
+1.house
+create table House
+(
+  house_id varchar(6) primary key,
+  name char(20) not null,
+  add_house_no varchar(5),
+  add_city char(15),
+  add_street varchar(20),
+  add_pin number(6)
+);
+
+insert into house values('h1','krishna kunj',1100,'mumbai','gokhale road',400028);
+
+drop table house; 
+drop table Members;
+drop table Investment; 
+drop table Roles;
+drop table Income;
+drop table Document;
+drop table Inventory;
+drop table budget;
+drop table Security;
+drop table Service;
+drop table service_provider;
+drop table expenses;
+drop table member_exp;
+drop table Mem_doc_details;
+
+2. members
+create table Members
+(
+  mem_id varchar(6) primary key,
+  mem_name char(10),
+  f_name char(10) not null,
+  l_name char(10) not null,
+  m_name char(10) not null,
+  age number(3) not null,
+  DOB date,
+  qualification varchar(20),
+  email_id varchar(20),
+  contact_no number(10),
+  gender char(6),
+  individual_exp varchar(10) 
+);
+insert into Members(mem_id,f_name,l_name,m_name,age,DOB,qualification,email_id,contact_no,gender,individual_exp) values('m1','geeta','kamat','vijay',73,'09-oct-1950','retd.teacher','geeta@gmail.com',9674526543,'f',20000);
+
+insert into members(mem_id,f_name,l_name,m_name,age,DOB,qualification,email_id,contact_no,gender,individual_exp) values('m2','mahesh','kamat','gangaram',50,'16-aug-1973','businessman','maky@gmail.com',9863752678,'m',30000);
+
+insert into members(mem_id,f_name,l_name,m_name,age,DOB,qualification,email_id,contact_no,gender,individual_exp) values('m3','manasi','kamat','mahesh',45,'18-jan-1978','engineer','manasi01@gmail.com',8876245378,'f',25000);
+
+insert into members(mem_id,f_name,l_name,m_name,age,DOB,qualification,email_id,contact_no,gender,individual_exp) values('m4','sia','kamat','mahesh',18,'04-april-2004','student','sia08@gmail.com',7736452894,'f',10000);
+
+insert into members(mem_id,f_name,l_name,m_name,age,DOB,qualification,email_id,contact_no,gender,individual_exp) values('m5','naman','kamat','mahesh',14,'17-jul-2009','student','naman@gmail.com',8786549602,'m',8000);
+
+
+
+3.investments
+create table Investment
+(
+  investment_id varchar(6) primary key,
+  investment_name varchar(20)not null,
+  date_of_invest date,
+  market_value number(10),
+  risk_percentage number(5),
+  amount number(10) check(amount>0),
+  return_of_invesment date,
+  mem_id varchar(6) constraint c20 references Members(mem_id),
+  owner_name varchar(6)
+);
+
+insert into investment values('i1','Stocks','09-sep-2020',300,10,30000,'09-nov-2023 ','m2','mahesh');
+
+insert into investment values('i2','gold','05-mar-1995',40000,3,400000,'05-mar-1995 ','m1','geeta');
+
+insert into investment values('i3','gold','09-apr-2005',50000,3,500000,'09-oct-2023 ','m3','manasi');
+
+insert into investment values('i4','Fd','08-nov-2023',0,'2',100000,'07-nov-2026','m4','sia');
+
+insert into investment values('i5','mutual funds','05-jul-2022',2000,'10',90758,'05-jul-2026','m3','manasi');
+
+
+
+
+4.roles
+create table Roles
+(
+  role_id varchar(6) primary key,
+  role_name varchar(20) not null,
+  responsibility varchar(20),
+  mem_id varchar(6) constraint c3 references Members(mem_id)
+);
+ insert into roles values('r1','house_management','management of house','m3');
+insert into roles values('r2','bill-payment','pay bills on time','m2');
+insert into roles values('r3','laundary','wash-dry clothes','m4');
+insert into roles values('r4','cleaning','clean house','m5');
+insert into roles values('r5','religious_work','remember the poojas','m1');
+
+
+5.income
+create table Income
+(
+  inc_id varchar2(6) primary key,
+  source char(10) not null,
+  inc_Date date,
+  amount number(7) check(amount>0),
+  mode_of_inc varchar2(10),
+  investment_id varchar2(6) constraint c5 references Investment(investment_id),
+  mem_id varchar2(6) constraint c4 references Members(mem_id)
+);
+
+insert into income values('i01','job','01-sep-2023','200000','active','i1','m2');
+insert into income values('i02','job','01-sep-2023','250000','active','i3','m3');
+insert into income values('i03','investment','05-jul-2026',90758,'passive','i5','m3');
+insert into income values('i04','investment','09-sep-2020',30000,'passive','i1','m2');
+
+
+6.documents
+create table Document
+(
+  doc_id varchar(6) primary key,
+  doc_name varchar2(20),
+  creation_date date,
+  last_mod_d date,
+  mem_id varchar(60) constraint c6 references Members(mem_id),
+  doc_no varchar2(20)
+);
+insert into Document values('d1','pan card','20-feb-2023','20-feb-2023','m4','AAANA1342D');
+insert into document values('d2','driving license','15-dec-1997','15-dec-2021','m2','DL-041997649');
+insert into Document values('d3','aadhar card','19-jul-2014','19-jul-2023','m5',123468453467);
+insert into Document values('d4','aadhar card','19-jul-2014','19-jul-2023','m1',456345879800);
+insert into Document values('d5','pan card','23-oct-1996','09-mar-2001','m3','DDDHA1456H');
+
+
+7.inventory
+create table Inventory
+(
+  inv_id varchar(6) primary key,
+  pro_name char(20) not null,
+  quantity varchar(5),
+  category varchar(10),
+  expiry_dur date,
+  supplier char(10),
+  price number(7) check(price!=0),
+  house_id varchar(6) constraint c7 references House(house_id)
+);
+ 
+insert into inventory values(1,'rice','10kg','grocery','05-oct-2023','lokmat',650,'h1');
+insert into inventory values(2,'detergent','2kg','laundry','05-jan-2024','surf excel',500,'h1');
+insert into inventory values(3,'soap','5','hygiene','07-nov-2023','pears',600,'h1');
+insert into inventory values(4,'sugar','3kg','grocery','05-oct-2023','madhur',135,'h1');
+insert into inventory values(5,'toilet cleaner','1l','hygiene','05-oct-2023','harpic',80,'h1');
+
+
+8.budget
+create table budget
+(
+  budget_id varchar(6) primary key,
+  category varchar(10),
+  men_name char(20) not null,
+  amount number(8) check(amount>0),
+  actual_expense varchar(10),
+  period number(5),
+  variance varchar(10),
+  house_id varchar(6)  constraint c8 references House(house_id)
+);
+
+
+insert into budget values('b1','grocery','manasi',9000,10000,12,1000,'h1');
+insert into budget values('b2','medical','geeta',5000,4000,12,1000,'h1');
+insert into budget values('b3','study','naman',80000,100000,12,2000,'h1');
+insert into budget values('b4','transport','sia',100,200,12,100,'h1');
+insert into budget values('b5','entertain','mahesh',4000,3500,12,500,'h1');
+insert into budget values('b6','bills','mahesh',6000,5000,12,1000,'h1');
+insert into budget values('b7','house','manasi',4000,3600,12,400,'h1');
+
+
+9.security
+create table Security
+(
+  sec_id varchar(6) primary key,
+  acc_control_remote varchar(20),
+  emergency_contact number(10),
+  window_sensor varchar(10),
+  lock_sensor varchar(10),
+  door_sensor varchar(10),
+  house_id varchar(6) constraint c9 references House(house_id),
+  acc_ctrl_manual varchar(10),
+  sensor varchar2(10)
+);
+
+insert into security(sec_id,acc_control_remote,emergency_contact,door_sensor,window_sensor,lock_sensor,house_id,acc_ctrl_manual) values('s1','window_ remote',100,'no','yes','yes','h1','manual');
+
+insert into security(sec_id,acc_control_remote,emergency_contact,door_sensor,window_sensor,lock_sensor,house_id,acc_ctrl_manual)
+values('s2','fire_alert app',101,'yes','no','yes','h1','manual');
+insert into security(sec_id,acc_control_remote,emergency_contact,door_sensor,window_sensor,lock_sensor,house_id,acc_ctrl_manual) 
+values('s3','doorbell remote',100,'yes','no','yes','h1','manual');
+insert into security(sec_id,acc_control_remote,emergency_contact,door_sensor,window_sensor,lock_sensor,house_id,acc_ctrl_manual) 
+values('s4','door_alert aap',100,'yes','no','no','h1','remote');
+
+
+
+
+
+
+10.
+create table service_provider
+(
+  ser_pro_id varchar(6) primary key,
+  provider_name char(20) not null,
+  provider_no number(10),
+  specilization varchar(30),
+  expenses number(6) check(expenses!=0),
+  certification char(20)
+);
+insert into service_provider values('sp1','rajesh shah',9087567352,'electricity_provider',500,'comp-manager');
+
+insert into service_provider values('sp2','maya kothari',8865475345,'medical_dely',1000,'pharmacist');
+
+insert into service_provider values('sp3','megha_kolta',7768567992,'tution',1000,'teacher');
+
+insert into service_provider values('sp4','nagesh mane',9974653890,'grocery store',10000,'store owner');
+insert into service_provider values('sp5','manish_raut',7338746537,'wifi_connect',1500,'wifi_provider');
+11.services
+
+create table Service
+(
+  serv_id varchar(6) primary key,
+  serv_name char(20) not null,
+  cost number(10) check(cost>0),
+  provider_no number(10),
+  duration varchar(10),
+  ser_pro_id varchar(6) constraint c16 references Service_provider(ser_pro_id),
+  house_id varchar(6) constraint c15 references House(house_id)
+);
+
+insert into Service values('sv1','electricity',500,9837345678,'monthly','sp1','h1');
+insert into Service values('sv2','medical_dely',2000,6379273849,'monthly','sp2','h1');
+insert into Service values('sv3','tution',1000,7725368192,'monthly','sp3','h1');
+insert into Service values('sv4','grocery_store',10000,7782635781,'monthly','sp4','h1');
+insert into Service values('sv5','wifi',1000,9783562874,'3-months','sp5','h1');
+
+
+12.expenses
+create table expenses
+(
+  exp_id varchar(6) primary key,
+  category varchar(10),
+  expe_amount number(7) check(expe_amount>0),
+  description varchar(20),
+  inventary_id varchar(6) constraint c19 references inventory(inv_id),
+  serv_id varchar(6) constraint c18 references Service(serv_id),
+  budget_id varchar(6) constraint c17 references Budget(budget_id),
+  individual_exp varchar(10)
+);
+
+
+insert into expenses( exp_id,category,expe_amount,description,inventary_id,serv_id,budget_id) values('e1','kitchen',10000,'monthly',1,'sv4','b1');
+insert into expenses(  exp_id,category,expe_amount,description,inventary_id,serv_id,budget_id) values('e2','toiletry',5000,'monthly',2,'sv4','b7');
+insert into expenses(exp_id,category,expe_amount,description,serv_id,budget_id,individual_exp)  values('e3','transport',12000,'yearly','sv5','b5',10000);
+insert into expenses( exp_id,category,expe_amount,description,serv_id,budget_id,individual_exp)  values('e4','education',100000,'yearly','sv3','b3',8000); 
+insert into expenses( exp_id,category,expe_amount,description,serv_id,budget_id,individual_exp)  values('e5','medication',2000,'monthly','sv2','b2',20000);
+insert into expenses( exp_id,category,expe_amount,description,serv_id,budget_id,individual_exp) values('e6','bills',5000,'monthly','sv1','b6',30000); 
+
+select*from expenses;
+
+
+13.
+create table Member_exp
+(
+  mem_exp_id varchar(6) primary key,
+  mem_id varchar(6) constraint c12 references members(mem_id),
+  exp_id varchar(6) constraint c13 references Expenses(exp_id)
+);
+
+insert into Member_exp values('n1','m1','e5');
+insert into Member_exp values('n2','m2','e6');
+insert into Member_exp values('n3','m4','e3');
+insert into Member_exp values('n4','m5','e4');
+insert into Member_exp values('n5','m3','e2');
+
+select*from member_exp;
+
+14.member_exp
+
+create table Mem_doc_details
+(
+  mem_doc_id varchar(6) primary key,
+  mem_id varchar(6)constraint c11 references Members(mem_id),
+  doc_id varchar(6) constraint c10 references Document(doc_id) 
+);
+
+insert into Mem_doc_details values(01,'m1','d4');
+insert into Mem_doc_details values(02,'m2','d2');
+insert into Mem_doc_details values(03,'m3','d5');
+insert into Mem_doc_details values(04,'m4','d1');
+insert into Mem_doc_details values(05,'m5','d3');
+  
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+queries:
+
+1.select f_name from members where individual_exp like'2%';
+
+2.select service.serv_name,service_provider.provider_name 
+from service_provider
+inner join service
+on service_provider.ser_pro_id=service.ser_pro_id 
+order by serv_id desc;
+
+3.select owner_name,max(amount)as max_invest
+from Investment
+group by owner_name;
+
+
+4.select men_name,sum(amount)as amt_paid
+from budget
+group by men_name
+order by sum(amount);
+
+5.select concat(f_name,m_name) as full_name,to_char(DOB,'dd-mon')as birth_date from members;
+
+6.
+select*from budget
+where category=(select category from expenses where exp_id='e3');
+
+7.
+select doc_name,doc_no from document where mem_id=(select mem_id from members where mem_id in('m4','m6')); 
+
+8.select source,amount from income where amount>all(select amount from budget);
+9.select expenses.category as major_category,budget.category as minor_category,expe_amount as total_amount from expenses
+full outer join budget
+on budget.budget_id=expenses.budget_id;  
+
+10.select to_char(return_of_invesment,'yy') -to_char(current_date,'yy') as time_interval from investment where investment_name='Fd';
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+functions
+
+1
+CREATE OR REPLACE FUNCTION sub(amount IN NUMBER, actual_expenses IN NUMBER) 
+return number
+is
+    savings number(20);
+BEGIN
+    savings:=amount-actual_expenses;
+    return savings;
+END;
+/
+
+
+declare
+   amount number(8):=&amount;
+   actual_expenses number(8):=&actual_expenses;
+   savings number(20);
+begin
+   savings:=sub(amount,actual_expenses);
+   dbms_output.put_line('savings are:'||savings);
+end;
+/
+
+2
+CREATE OR REPLACE FUNCTION sum(investment IN NUMBER, sal_amount IN NUMBER)
+return number
+is
+    income number(20);
+BEGIN
+    income:=investment+sal_amount;
+    return income;
+END;
+/
+declare
+     investment number(8):=&investment;
+     sal_amount number(8):=&sal_amount;
+     income number(20);
+begin
+     income:=sum (investment,sal_amount);
+     dbms_output.put_line('income is:'||income);
+end;
+/
+
+
+
+CREATE OR REPLACE FUNCTION expn(security IN NUMBER, inventary IN NUMBER)
+return number
+is
+     total_expenses number(20);
+BEGIN
+     total_expenses:=security+inventary;
+     return total_expenses;
+END;
+/
+
+declare
+     security number(8):=&security;
+     inventary number(8):=&inventary;
+     total_expenses number(20);
+begin
+    total_expenses:=expn(security, inventary );
+    dbms_output.put_line('total expense is:'||total_expenses);
+end;
+/
+
+1.) Function to show document of member by accepting member's id :
+create or replace function doc(v_id in varchar)
+return varchar
+as
+v_doc varchar(50);
+begin
+select doc_name into v_doc from document where doc_id=v_id ;
+return v_doc;
+end;
+/
+begin
+dbms_output.put_line('Name and Number of document is '||doc('&v_id'));
+end;
+/
+
+2.) function to show number of service provider by accepting service id:
+create or replace function mobile(v_id in varchar)
+return varchar
+as
+v_mobile number(20);
+begin
+select provider_no into v_mobile from service where serv_id=v_id;
+return v_mobile;
+end;
+/
+begin
+dbms_output.put_line(' Number is '||mobile('&v_id'));
+end;
+/
+
+3.) Function to show the category of budget by accepting budget id:
+create and replace function category(v_id in varchar)
+return varchar
+as
+v_category varchar(10);
+begin
+select category into v_category from budget where budget_id=v_id;
+return v_category;
+end;
+/
+begin
+dbms_output.put_line('category is'|| category('&v_id'));
+end;
+/
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+triggers 
+
+1.
+CREATE OR REPLACE TRIGGER update_market_value
+AFTER UPDATE OF return_of_invesment ON investment
+FOR EACH ROW
+BEGIN
+    -- Calculate the new market value based on the updated return date
+NEW.market_value := :OLD.market_value * 1.05;
+    -- Update the market value column in the investment table
+UPDATE investment SET market_value = :NEW.market_value WHERE investment_id = :OLD.investment_id;
+    
+END;
+/
+
+2.done
+CREATE OR REPLACE TRIGGER calculate_amount
+AFTER INSERT ON expenses
+FOR EACH ROW
+BEGIN
+    -- Calculate the amount for the budget the new expense belongs to
+    -- Update the amount column in the budget table
+UPDATE budget
+    SET amount= (SELECT SUM(amount) FROM expenses WHERE budget_id = :NEW.budget_id)
+    WHERE budget_id = :NEW.budget_id;
+END;
+/
+
+3.done
+CREATE OR REPLACE TRIGGER update_inventory_quantity
+AFTER INSERT ON inventory
+FOR EACH ROW
+BEGIN
+    UPDATE inventory
+    SET quantity = quantity + :NEW.quantity
+    WHERE inv_id = :NEW.inv_id;
+END;
+/
+
+4.
+CREATE OR REPLACE TRIGGER update_budget_variance
+AFTER UPDATE OF actual_expense ON budget
+FOR EACH ROW
+BEGIN
+    :NEW.variance := :new.budget_amount - :NEW.actual_expense;
+END;
+/
+
+5.
+CREATE OR REPLACE TRIGGER generate_document_id
+BEFORE INSERT ON document
+FOR EACH ROW
+BEGIN
+    :NEW.document_id := document_id_sequence.nextval;
+END;
+/
